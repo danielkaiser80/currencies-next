@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {fetchCurrencyForSymbol} from "../service/BackendService";
+import {defaultCode, fetchCurrencyForSymbol} from "../service/BackendService";
 import Select from "./Select";
 import Value from './Value';
 
@@ -42,6 +42,9 @@ const Calculator = () => {
 
     const [firstValue, setFirstValue] = React.useState(0);
     const [secondValue, setSecondValue] = React.useState(0);
+
+    handleLabel(defaultCode,1);
+    handleLabel(defaultCode,2);
 
     return <div>
         <div>1. Währung:
