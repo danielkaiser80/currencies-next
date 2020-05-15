@@ -5,6 +5,8 @@ export interface Currency {
     value: number;
 }
 
+export const defaultCode = 'EUR';
+
 export const fetchAllCurrencies = async () => {
     try {
         const response = await axios.get<Array<Currency>>('/currencies');
@@ -14,9 +16,12 @@ export const fetchAllCurrencies = async () => {
         console.log(error);
         return [];
     }
-};
+}
 
 
 export const fetchCurrencyForSymbol = async (symbol: string) => {
+    if (symbol === defaultCode) {
+        return {data: {isoCode: defaultCode, value: 1}}
+    }
     return await axios.get<Currency>(`/currencies/${symbol}`);
-};
+}

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {fetchAllCurrencies} from "../service/BackendService";
+import {defaultCode, fetchAllCurrencies} from "../service/BackendService";
 
 interface SelectProps {
     onSelect: (label: string) => void
@@ -12,7 +12,9 @@ const Select = (props: SelectProps) => {
     useEffect(() => {
         fetchAllCurrencies().then(currencies => {
             if (currencies) {
-                setCurrencyValues(currencies.map((currencyValue) => ({label: currencyValue.isoCode})))
+                const loadedCurrencies = currencies.map((currencyValue) => ({label: currencyValue.isoCode}));
+                loadedCurrencies.unshift({label: defaultCode});
+                setCurrencyValues(loadedCurrencies)
                 setLoading(false)
             }
         })
