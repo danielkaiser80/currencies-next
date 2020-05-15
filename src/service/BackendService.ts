@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-interface Currency {
+export interface Currency {
     isoCode: string;
     value: number;
 }

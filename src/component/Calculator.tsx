@@ -1,6 +1,3 @@
-//
-// - mit Hilfe von 2 Dropdowns soll man die umzurechnenden Währungen auswählen können
-//
 // - zusätzlich soll man mit Hilfe von 2 Eingabefeldern die Beträge der jeweils ausgewählten Währung eingeben können
 //
 // - während der Eingabe in eines der Felder soll das jeweils andere Feld den umgerechneten Betrag anzeigen
@@ -12,16 +9,15 @@
 // - die Kurse, sowie die Währungen sollen vom Currencies-Server abgeholt werden
 
 import React from "react";
-import {fetchAllCurrencies, fetchCurrencyForSymbol} from "../service/BackendService";
+import {fetchCurrencyForSymbol} from "../service/BackendService";
+import Select from "./Select";
 
-const Calculator = () => {
-    return <div></div>
-}
 
-fetchAllCurrencies().then(currencies => {
-    if (currencies)
-        console.log(currencies);
-});
+const Calculator = () =>
+    <div>
+        <div>1. Währung: <Select/></div>
+        <div>2. Währung: <Select/></div>
+    </div>
 
 fetchCurrencyForSymbol('ZAR').then(currency => {
     if (currency)
