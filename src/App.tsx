@@ -5,14 +5,14 @@ import {fetchAllCurrencies, fetchCurrencyForSymbol} from "./service/BackendServi
 
 function App() {
 
-    fetchAllCurrencies().then(response => {
-        if (response)
-            console.log(response.data);
+    fetchAllCurrencies().then(currencies => {
+        if (currencies)
+            console.log(currencies);
     });
 
-    fetchCurrencyForSymbol('ZAR').then(response => {
-        if (response)
-            console.log(response.data);
+    fetchCurrencyForSymbol('ZAR').then(currency => {
+        if (currency)
+            console.log(currency);
     });
 
     return (
