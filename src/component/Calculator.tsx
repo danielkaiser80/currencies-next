@@ -1,6 +1,6 @@
-import React, {ChangeEvent} from "react";
-import {defaultCode, fetchCurrencyForSymbol} from "../service/BackendService";
-import Select from "./Select";
+import React, {ChangeEvent} from 'react';
+import {defaultCode, fetchCurrencyForSymbol} from '../service/BackendService';
+import Select from './Select';
 import Value from './Value';
 
 let firstIsoCode: string | undefined;
@@ -17,15 +17,13 @@ function handleLabel(label: string, index: number) {
 
 const Calculator = () => {
 
-    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (firstIsoCode && secondIsoCode && e.target) {
-            const firstPromise = fetchCurrencyForSymbol(firstIsoCode);
-            const secondPromise = fetchCurrencyForSymbol(secondIsoCode);
             // read before handling promises, as this changes the event
             const newValue = parseFloat(e.target.value);
             const name = e.target.name;
 
-            Promise.all([firstPromise, secondPromise]).then(currencies => {
+            Promise.all([fetchCurrencyForSymbol(firstIsoCode), fetchCurrencyForSymbol(secondIsoCode)]).then(currencies => {
                 if (currencies) {
                     const convertedValue = newValue / currencies[0].data.value * currencies[1].data.value;
                     if (name === 'firstValue') {
@@ -38,13 +36,13 @@ const Calculator = () => {
                 }
             })
         }
-    }
+    };
 
     const [firstValue, setFirstValue] = React.useState(0);
     const [secondValue, setSecondValue] = React.useState(0);
 
-    handleLabel(defaultCode,1);
-    handleLabel(defaultCode,2);
+    handleLabel(defaultCode, 1);
+    handleLabel(defaultCode, 2);
 
     return <div>
         <div>1. Währung:
