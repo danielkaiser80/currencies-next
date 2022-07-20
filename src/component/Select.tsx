@@ -5,7 +5,7 @@ interface SelectProps {
     onSelect: (label: string) => void
 }
 
-const Select = (props: SelectProps) => {
+const Select = ({onSelect}: SelectProps) => {
     const [loading, setLoading] = React.useState(true);
     const [currencyValues, setCurrencyValues] = React.useState<Array<{ label: string }>>([{label: "Loading ..."}]);
 
@@ -18,9 +18,9 @@ const Select = (props: SelectProps) => {
                 setLoading(false)
             }
         })
-    }, [currencyValues, props])
+    }, [currencyValues])
 
-    return <select disabled={loading} onChange={e => props.onSelect(e.currentTarget.value)}>
+    return <select disabled={loading} onChange={e => onSelect(e.currentTarget.value)}>
         {currencyValues.map(item => (
             <option
                 key={item.label}
