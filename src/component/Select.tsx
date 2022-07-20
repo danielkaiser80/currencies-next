@@ -1,35 +1,37 @@
-import React, {useEffect} from "react";
-import {defaultCode, fetchAllCurrencies} from "../service/BackendService";
+import React, { useEffect } from 'react';
+import { defaultCode, fetchAllCurrencies } from '../service/BackendService';
 
 interface SelectProps {
     onSelect: (label: string) => void
 }
 
-const Select = ({onSelect}: SelectProps) => {
-    const [loading, setLoading] = React.useState(true);
-    const [currencyValues, setCurrencyValues] = React.useState<Array<{ label: string }>>([{label: "Loading ..."}]);
+const Select: React.FC<SelectProps> = ({ onSelect }) => {
+  const [loading, setLoading] = React.useState(true);
+  const [currencyValues, setCurrencyValues] = React.useState<Array<string>>(['Loading ...']);
 
-    useEffect(() => {
-        fetchAllCurrencies().then(currencies => {
-            if (currencies) {
-                const loadedCurrencies = currencies.map((currencyValue) => ({label: currencyValue.isoCode}));
-                loadedCurrencies.unshift({label: defaultCode});
-                setCurrencyValues(loadedCurrencies)
-                setLoading(false)
-            }
-        })
-    }, [currencyValues])
+  useEffect(() => {
+    fetchAllCurrencies().then((currencies) => {
+      if (currencies) {
+        const loadedCurrencies = currencies.map(({ isoCode }) => (isoCode));
+        loadedCurrencies.unshift(defaultCode);
+        setCurrencyValues(loadedCurrencies);
+        setLoading(false);
+      }
+    });
+  }, [currencyValues]);
 
-    return <select disabled={loading} onChange={e => onSelect(e.currentTarget.value)}>
-        {currencyValues.map(item => (
-            <option
-                key={item.label}
-                value={item.label}
-            >
-                {item.label}
-            </option>
-        ))}
+  return (
+    <select disabled={loading} onChange={(e) => onSelect(e.currentTarget.value)}>
+      {currencyValues.map((item) => (
+        <option
+          key={item}
+          value={item}
+        >
+          {item}
+        </option>
+      ))}
     </select>
-}
+  );
+};
 
 export default Select;

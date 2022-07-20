@@ -1,14 +1,13 @@
-import React from "react";
+import React from 'react';
 
 interface ValueProps {
     value: number
 }
 
-const Value = (props: ValueProps) =>
-    (
-        <span>
-            {props.value.toLocaleString(undefined, {maximumFractionDigits: 2})}
-        </span>
-    )
+const Value = ({ value }: ValueProps) => (
+  <span>
+    {value.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+  </span>
+);
 
 export default Value;

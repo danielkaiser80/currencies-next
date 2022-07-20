@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react';
 
-const Heading = () => <h1>Währungsrechner</h1>
+const Heading: () => JSX.Element = () => <h1>Währungsrechner</h1>;
 
 export default Heading;
