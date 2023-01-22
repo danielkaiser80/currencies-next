@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Heading: () => JSX.Element = () => <h1>Währungsrechner</h1>;
 

@@ -1,15 +1,17 @@
-import axios from 'axios';
+import axios from "axios";
 
 export interface Currency {
-    isoCode: string;
-    value: number;
+  isoCode: string;
+  value: number;
 }
 
-export const defaultCode = 'EUR';
+export const defaultCode = "EUR";
 
 export const fetchAllCurrencies = async () => {
   try {
-    const response = await axios.get<Array<Currency>>('/currencies');
+    const response = await axios.get<Array<Currency>>(
+      "http://localhost:8080/currencies"
+    );
     return response.data;
   } catch (error) {
     // simply return empty array
@@ -22,5 +24,5 @@ export const fetchCurrencyForSymbol = async (symbol: string) => {
   if (symbol === defaultCode) {
     return { data: { isoCode: defaultCode, value: 1 } };
   }
-  return axios.get<Currency>(`/currencies/${symbol}`);
+  return axios.get<Currency>(`http://localhost:8080/currencies/${symbol}`);
 };

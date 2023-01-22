@@ -1,53 +1,47 @@
 module.exports = {
   extends: [
-    'react-app',
-    'airbnb',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
+    "react-app",
+    "airbnb",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
   overrides: [
     {
-      files: [
-        '**/*.ts?(x)',
-      ],
+      files: ["**/*.ts?(x)"],
       rules: {
-        'react/jsx-filename-extension': [
+        "react/jsx-filename-extension": [
           1,
           {
-            extensions: [
-              '.tsx',
-            ],
+            extensions: [".tsx"],
           },
         ],
-        'import/extensions': [
-          'error',
-          'ignorePackages',
+        "import/extensions": [
+          "error",
+          "ignorePackages",
           {
-            ts: 'never',
-            tsx: 'never',
+            ts: "never",
+            tsx: "never",
           },
         ],
       },
     },
   ],
   settings: {
-    'import/parsers': {
-      '@typescript-eslint/parser': [
-        '.ts',
-        '.tsx',
-      ],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
     },
-    'import/resolver': {
+    "import/resolver": {
       typescript: {
         alwaysTryTypes: true,
       },
     },
   },
   rules: {
-    'react/function-component-definition': ['error',
+    "react/function-component-definition": [
+      "error",
       {
-        namedComponents: 'arrow-function',
-        unnamedComponents: 'arrow-function',
+        namedComponents: "arrow-function",
+        unnamedComponents: "arrow-function",
       },
     ],
   },
