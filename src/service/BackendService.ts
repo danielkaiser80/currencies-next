@@ -15,6 +15,8 @@ export const fetchAllCurrencies = async () => {
     return response.data;
   } catch (error) {
     // simply return empty array
+    // TODO add useful error handling, as the app makes no sense without the backend
+    // eslint-disable-next-line no-console
     console.log(error);
     return [];
   }
