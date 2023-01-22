@@ -7,17 +7,17 @@ export interface Currency {
 
 export const defaultCode = "EUR";
 
-export const fetchAllCurrencies = async () => {
+export const fetchAllIsoCodes: () => Promise<string[]> = async () => {
   try {
     const response = await axios.get<Array<Currency>>(
       "http://localhost:8080/currencies"
     );
-    return response.data;
+    return response.data.map(({ isoCode }) => isoCode);
   } catch (error) {
-    // simply return empty array
     // TODO add useful error handling, as the app makes no sense without the backend
     // eslint-disable-next-line no-console
     console.log(error);
+    // simply return empty array
     return [];
   }
 };

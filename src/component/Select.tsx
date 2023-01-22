@@ -1,32 +1,16 @@
-import React, { useEffect } from "react";
-import { defaultCode, fetchAllCurrencies } from "../service/BackendService";
+import React from "react";
+import { useSelector } from "react-redux";
+import { selectCurrencies } from "../app/store";
 
 interface SelectProps {
   onSelect: (label: string) => void;
 }
 
 const Select: React.FC<SelectProps> = ({ onSelect }) => {
-  const [loading, setLoading] = React.useState(true);
-  const [currencyValues, setCurrencyValues] = React.useState<Array<string>>([
-    "Loading ...",
-  ]);
-
-  useEffect(() => {
-    fetchAllCurrencies().then((currencies) => {
-      if (currencies) {
-        const loadedCurrencies = currencies.map(({ isoCode }) => isoCode);
-        loadedCurrencies.unshift(defaultCode);
-        setCurrencyValues(loadedCurrencies);
-        setLoading(false);
-      }
-    });
-  }, [currencyValues]);
+  const currencyValues: Array<string> = useSelector(selectCurrencies);
 
   return (
-    <select
-      disabled={loading}
-      onChange={(e) => onSelect(e.currentTarget.value)}
-    >
+    <select onChange={(e) => onSelect(e.currentTarget.value)}>
       {currencyValues.map((item) => (
         <option key={item} value={item}>
           {item}
