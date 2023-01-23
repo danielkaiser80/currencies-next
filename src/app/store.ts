@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 import reducer from "../currencies/recducer";
 
 const store = configureStore({
@@ -12,3 +13,5 @@ export type RootState = ReturnType<typeof store.getState>;
 
 export const selectCurrencies = (state: RootState) => state.currencies;
 export const selectValues = (state: RootState) => state.values;
+
+export const useAppDispatch = () => useDispatch<typeof store.dispatch>();

@@ -24,9 +24,17 @@ export const fetchAllIsoCodes: () => Promise<string[]> = async () => {
   }
 };
 
-export const fetchCurrencyForSymbol = async (symbol: string) => {
+export const fetchCurrencyForSymbol = async (
+  symbol: string
+): Promise<{ isoCode: string; value: number }> => {
   if (symbol === defaultCode) {
-    return { data: { isoCode: defaultCode, value: 1 } };
+    return { isoCode: defaultCode, value: 1 };
   }
-  return axios.get<Currency>(`http://localhost:8080/currencies/${symbol}`);
+  const { isoCode, value } = (
+    await axios.get<{
+      isoCode: string;
+      value: string;
+    }>(`http://localhost:8080/currencies/${symbol}`)
+  ).data;
+  return { isoCode, value: parseFloat(value) };
 };
