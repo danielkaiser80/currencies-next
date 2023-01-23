@@ -46,5 +46,7 @@ module.exports = {
       },
     ],
     "no-console": ["off"],
+    // switch off as we have the immer library with redux; still we don't want this anywhere
+    'no-param-reassign': ['off'],
   },
 };

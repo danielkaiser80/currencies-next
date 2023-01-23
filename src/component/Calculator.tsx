@@ -1,27 +1,40 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Select from "./Select";
 import Value from "./Value";
+import {
+  calculateFirstValue,
+  calculateSecondValue,
+  setFirstCurrency,
+  setSecondCurrency,
+} from "../currencies/recducer";
+import { selectValues } from "../app/store";
 
 const Calculator = () => {
-  const firstValue = 0;
-  const secondValue = 0;
+  const dispatch = useDispatch();
+  const values = useSelector(selectValues);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    const newValue = parseFloat(value);
+    if (name === "firstValue") dispatch(calculateFirstValue(newValue));
+    if (name === "secondValue") dispatch(calculateSecondValue(newValue));
+  };
 
   return (
     <div>
       <div>
         1. Währung:
-        {/* eslint-disable-next-line no-console */}
-        <Select onSelect={(label) => console.log("selected first ", label)} />
-        <input name="firstValue" />
-        umgerechnet: <Value value={firstValue} />
+        <Select onSelect={(label) => dispatch(setFirstCurrency(label))} />
+        <input name="firstValue" onChange={handleInputChange} />
+        umgerechnet: <Value value={values[0]} />
       </div>
 
       <div>
         2. Währung:
-        {/* eslint-disable-next-line no-console */}
-        <Select onSelect={(label) => console.log("selected second ", label)} />
-        <input name="secondValue" />
-        umgerechnet: <Value value={secondValue} />
+        <Select onSelect={(label) => dispatch(setSecondCurrency(label))} />
+        <input name="secondValue" onChange={handleInputChange} />
+        umgerechnet: <Value value={values[1]} />
       </div>
     </div>
   );

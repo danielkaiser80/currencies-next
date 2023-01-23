@@ -11,3 +11,4 @@ export default store;
 export type RootState = ReturnType<typeof store.getState>;
 
 export const selectCurrencies = (state: RootState) => state.currencies;
+export const selectValues = (state: RootState) => state.values;

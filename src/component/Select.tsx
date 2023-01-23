@@ -7,7 +7,7 @@ interface SelectProps {
 }
 
 const Select: React.FC<SelectProps> = ({ onSelect }) => {
-  const currencyValues: Array<string> = useSelector(selectCurrencies);
+  const currencyValues = useSelector(selectCurrencies);
 
   return (
     <select onChange={(e) => onSelect(e.currentTarget.value)}>
