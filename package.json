@@ -5,6 +5,9 @@
   "dependencies": {
     "@babel/core": "^7.20.12",
     "@craco/craco": "^7.0.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.5",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/dom": "^8.20.0",
     "@testing-library/jest-dom": "^5.16.5",

@@ -4,7 +4,7 @@ import { fetchAllIsoCodes } from "../service/BackendService";
 interface CurrencyState {
   currencies: Array<string>;
   selectedCurrencies: [string, string];
-  values: [number, number];
+  values: [string, string];
 }
 
 export const fetchCurrencies = createAsyncThunk(
@@ -15,7 +15,7 @@ export const fetchCurrencies = createAsyncThunk(
 const initialState: CurrencyState = {
   currencies: [],
   selectedCurrencies: ["EUR", "EUR"],
-  values: [0, 0],
+  values: ["", ""],
 };
 
 const currencySlice = createSlice({
@@ -24,15 +24,23 @@ const currencySlice = createSlice({
   reducers: {
     setFirstCurrency: (state, action) => {
       state.selectedCurrencies[0] = action.payload;
+      state.values = ["", ""];
     },
     setSecondCurrency: (state, action) => {
       state.selectedCurrencies[1] = action.payload;
+      state.values = ["", ""];
     },
-    calculateFirstValue: (state, action) => {
-      state.values[1] = action.payload;
-    },
-    calculateSecondValue: (state, action) => {
-      state.values[0] = action.payload;
+    calculateValue: (state, action) => {
+      const { value, name } = action.payload;
+      const newValue = parseFloat(value);
+      const index = name === "firstValue" ? 0 : 1;
+      state.values[index] = Number.isNaN(newValue) ? "" : newValue.toString();
+
+      // now we can calculate the other value
+      const otherIndex = name !== "firstValue" ? 0 : 1;
+      state.values[otherIndex] = Number.isNaN(newValue)
+        ? ""
+        : (newValue / 2).toString();
     },
   },
   extraReducers(builder) {
@@ -42,11 +50,7 @@ const currencySlice = createSlice({
   },
 });
 
-export const {
-  setFirstCurrency,
-  setSecondCurrency,
-  calculateFirstValue,
-  calculateSecondValue,
-} = currencySlice.actions;
+export const { setFirstCurrency, setSecondCurrency, calculateValue } =
+  currencySlice.actions;
 
 export default currencySlice.reducer;
