@@ -30,17 +30,28 @@ const currencySlice = createSlice({
       state.selectedCurrencies[1] = action.payload;
       state.values = ["", ""];
     },
-    calculateValue: (state, action) => {
+    calculateValue: ({ selectedCurrencies, values }, action) => {
       const { value, name } = action.payload;
       const newValue = parseFloat(value);
+
       const index = name === "firstValue" ? 0 : 1;
-      state.values[index] = Number.isNaN(newValue) ? "" : newValue.toString();
+      const otherIndex = 1 - index;
+      if (Number.isNaN(newValue)) {
+        values[index] = "";
+        values[otherIndex] = "";
+        return;
+      }
 
       // now we can calculate the other value
-      const otherIndex = name !== "firstValue" ? 0 : 1;
-      state.values[otherIndex] = Number.isNaN(newValue)
-        ? ""
-        : (newValue / 2).toString();
+      let divisor;
+      if (selectedCurrencies[0] === selectedCurrencies[1]) {
+        divisor = 1;
+      } else {
+        divisor = 2;
+      }
+
+      values[index] = newValue.toString();
+      values[otherIndex] = (newValue / divisor).toString();
     },
   },
   extraReducers(builder) {
