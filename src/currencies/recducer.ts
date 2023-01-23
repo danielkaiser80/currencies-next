@@ -44,28 +44,32 @@ const currencySlice = createSlice({
       state.selectedCurrencies[1] = action.payload;
       state.values = initialState.values;
     },
-    calculateValue: ({ selectedCurrencies, values }, action) => {
+    calculateValue: ({ selectedCurrencies, values, exchangeRates }, action) => {
       const { value, name } = action.payload;
-      const newValue = parseFloat(value);
+      const newValue = parseFloat(value.replace(/\./g, "").replace(/,/g, "."));
 
-      const index = name === "firstValue" ? 0 : 1;
-      const otherIndex = 1 - index;
       if (Number.isNaN(newValue)) {
-        values[index] = "";
-        values[otherIndex] = "";
+        // noinspection JSUnusedAssignment
+        values = initialState.values;
         return;
       }
 
-      // now we can calculate the other value
-      let divisor;
+      const options = { maximumFractionDigits: 2 };
+      const stringValue = newValue.toLocaleString(undefined, options);
       if (selectedCurrencies[0] === selectedCurrencies[1]) {
-        divisor = 1;
-      } else {
-        divisor = 2;
+        // noinspection JSUnusedAssignment
+        values = [stringValue, stringValue];
+        return;
       }
 
-      values[index] = newValue.toString();
-      values[otherIndex] = (newValue / divisor).toString();
+      const index = name === "firstValue" ? 0 : 1;
+      const otherIndex = 1 - index;
+
+      values[index] = stringValue;
+      values[otherIndex] = (
+        (newValue / exchangeRates[index]) *
+        exchangeRates[otherIndex]
+      ).toLocaleString(undefined, options);
     },
   },
   extraReducers(builder) {
@@ -76,7 +80,6 @@ const currencySlice = createSlice({
       .addCase(fetchCurrencyValue.fulfilled, (state, action) => {
         const { index, value } = action.payload;
         state.exchangeRates[index] = value;
-        console.log(state);
       });
   },
 });
