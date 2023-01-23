@@ -12,7 +12,9 @@ export const fetchAllIsoCodes: () => Promise<string[]> = async () => {
     const response = await axios.get<Array<Currency>>(
       "http://localhost:8080/currencies"
     );
-    return response.data.map(({ isoCode }) => isoCode);
+    const currencies = response.data.map(({ isoCode }) => isoCode);
+    currencies.unshift(defaultCode);
+    return currencies;
   } catch (error) {
     // TODO add useful error handling, as the app makes no sense without the backend
     // eslint-disable-next-line no-console

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAllIsoCodes } from "../service/BackendService";
+import { defaultCode, fetchAllIsoCodes } from "../service/BackendService";
 
 interface CurrencyState {
   currencies: Array<string>;
@@ -14,7 +14,7 @@ export const fetchCurrencies = createAsyncThunk(
 
 const initialState: CurrencyState = {
   currencies: [],
-  selectedCurrencies: ["EUR", "EUR"],
+  selectedCurrencies: [defaultCode, defaultCode],
   values: ["", ""],
 };
 
