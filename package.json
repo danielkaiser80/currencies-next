@@ -29,7 +29,9 @@
   },
   "resolutions": {
     "@babel/core": "^7.20.12",
-    "@babel/runtime": "^7.20.13"
+    "@babel/runtime": "^7.20.13",
+    "minimatch": "^5.1.0",
+    "recursive-readdir": "2.2.3"
   },
   "browserslist": {
     "production": [
