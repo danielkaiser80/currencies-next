@@ -1,17 +1,22 @@
 import React, { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
-import { Input, InputLabel } from "@mui/material";
+import { Input } from "@mui/material";
 import CurrencySelect from "./CurrencySelect";
 import {
   calculateValue,
   fetchCurrencyValue,
   setCurrency,
 } from "../currencies/recducer";
-import { selectValues, useAppDispatch } from "../app/store";
+import {
+  selectSelectedCurrencies,
+  selectValues,
+  useAppDispatch,
+} from "../app/store";
 
 const Calculator = () => {
   const dispatch = useAppDispatch();
   const values = useSelector(selectValues);
+  const selectedCurrencies = useSelector(selectSelectedCurrencies);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,8 +31,11 @@ const Calculator = () => {
   return (
     <div>
       <div>
-        <InputLabel>1. Währung:</InputLabel>
-        <CurrencySelect onSelect={(label) => handleCurrencyChange(label, 0)} />
+        <CurrencySelect
+          label="1. Währung"
+          value={selectedCurrencies[0]}
+          onSelect={(label) => handleCurrencyChange(label, 0)}
+        />
         <Input
           name="firstValue"
           value={values[0]}
@@ -36,8 +44,11 @@ const Calculator = () => {
       </div>
 
       <div>
-        <InputLabel>2. Währung:</InputLabel>
-        <CurrencySelect onSelect={(label) => handleCurrencyChange(label, 1)} />
+        <CurrencySelect
+          label="2. Währung"
+          value={selectedCurrencies[1]}
+          onSelect={(label) => handleCurrencyChange(label, 1)}
+        />
 
         <Input
           name="secondValue"
