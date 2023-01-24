@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
-import { Input, Paper } from "@mui/material";
-import CurrencySelect from "./CurrencySelect";
+import { Paper } from "@mui/material";
 import {
   calculateValue,
   fetchCurrencyValue,
@@ -31,28 +30,17 @@ const Calculator = () => {
 
   return (
     <Paper>
-      <CurrencyElement
-        selectedCurrency={selectedCurrencies[0]}
-        onSelect={(label) => handleCurrencyChange(label, 0)}
-        value={values[0]}
-        handleInputChange={handleInputChange}
-        label="1. Währung"
-        inputName="firstValue"
-      />
-
-      <div>
-        <CurrencySelect
-          label="2. Währung"
-          value={selectedCurrencies[1]}
-          onSelect={(label) => handleCurrencyChange(label, 1)}
+      {[0, 1].map((index) => (
+        <CurrencyElement
+          key={`currency ${index}`}
+          selectedCurrency={selectedCurrencies[index]}
+          onSelect={(label) => handleCurrencyChange(label, index)}
+          value={values[index]}
+          handleInputChange={handleInputChange}
+          label={`${index + 1} Währung`}
+          inputName={`input_${index}`}
         />
-
-        <Input
-          name="secondValue"
-          value={values[1]}
-          onChange={handleInputChange}
-        />
-      </div>
+      ))}
     </Paper>
   );
 };

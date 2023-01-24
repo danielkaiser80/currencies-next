@@ -26,7 +26,7 @@ export const fetchCurrencyValue = createAsyncThunk(
 );
 
 const initialState: CurrencyState = {
-  currencies: [],
+  currencies: [defaultCode],
   selectedCurrencies: [defaultCode, defaultCode],
   values: ["", ""],
   exchangeRates: [1, 1],
@@ -57,7 +57,8 @@ const currencySlice = createSlice({
         return;
       }
 
-      const index = name === "firstValue" ? 0 : 1;
+      // the name is `input_${index}`
+      const index = parseInt(name.slice(-1), 10);
       const otherIndex = 1 - index;
 
       values[index] = stringValue;
