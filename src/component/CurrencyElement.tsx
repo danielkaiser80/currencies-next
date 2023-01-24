@@ -4,24 +4,28 @@ import CurrencySelect from "./CurrencySelect";
 
 interface CurrencyElementProps {
   selectedCurrency: string;
-  handleCurrencyChange: (label: string, index: number) => void;
+  label: string;
+  inputName: string;
   value: string;
+  onSelect: (isoCode: string) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => unknown;
 }
 
 const CurrencyElement = ({
   selectedCurrency,
+  label,
+  inputName,
   value,
-  handleCurrencyChange,
+  onSelect,
   handleInputChange,
 }: CurrencyElementProps) => (
   <Paper variant="outlined" square>
     <CurrencySelect
-      label="1. Währung"
+      label={label}
       value={selectedCurrency}
-      onSelect={(label) => handleCurrencyChange(label, 0)}
+      onSelect={onSelect}
     />
-    <Input name="firstValue" value={value} onChange={handleInputChange} />
+    <Input name={inputName} value={value} onChange={handleInputChange} />
   </Paper>
 );
 

@@ -33,9 +33,11 @@ const Calculator = () => {
     <Paper>
       <CurrencyElement
         selectedCurrency={selectedCurrencies[0]}
-        handleCurrencyChange={handleCurrencyChange}
+        onSelect={(label) => handleCurrencyChange(label, 0)}
         value={values[0]}
         handleInputChange={handleInputChange}
+        label="1. Währung"
+        inputName="firstValue"
       />
 
       <div>
