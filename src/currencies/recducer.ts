@@ -36,12 +36,9 @@ const currencySlice = createSlice({
   name: "currencies",
   initialState,
   reducers: {
-    setFirstCurrency: (state, action) => {
-      state.selectedCurrencies[0] = action.payload;
-      state.values = initialState.values;
-    },
-    setSecondCurrency: (state, action) => {
-      state.selectedCurrencies[1] = action.payload;
+    setCurrency: (state, action) => {
+      const { label, index } = action.payload;
+      state.selectedCurrencies[index] = label;
       state.values = initialState.values;
     },
     calculateValue: ({ selectedCurrencies, values, exchangeRates }, action) => {
@@ -82,7 +79,6 @@ const currencySlice = createSlice({
   },
 });
 
-export const { setFirstCurrency, setSecondCurrency, calculateValue } =
-  currencySlice.actions;
+export const { setCurrency, calculateValue } = currencySlice.actions;
 
 export default currencySlice.reducer;

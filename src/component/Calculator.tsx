@@ -5,8 +5,7 @@ import CurrencySelect from "./CurrencySelect";
 import {
   calculateValue,
   fetchCurrencyValue,
-  setFirstCurrency,
-  setSecondCurrency,
+  setCurrency,
 } from "../currencies/recducer";
 import { selectValues, useAppDispatch } from "../app/store";
 
@@ -19,16 +18,16 @@ const Calculator = () => {
     return dispatch(calculateValue({ name, value }));
   };
 
+  const handleCurrencyChange = (label: string, index: number) => {
+    dispatch(setCurrency({ label, index }));
+    dispatch(fetchCurrencyValue({ symbol: label, index }));
+  };
+
   return (
     <div>
       <div>
         <InputLabel>1. Währung:</InputLabel>
-        <CurrencySelect
-          onSelect={(label) => {
-            dispatch(setFirstCurrency(label));
-            dispatch(fetchCurrencyValue({ symbol: label, index: 0 }));
-          }}
-        />
+        <CurrencySelect onSelect={(label) => handleCurrencyChange(label, 0)} />
         <Input
           name="firstValue"
           value={values[0]}
@@ -38,12 +37,8 @@ const Calculator = () => {
 
       <div>
         <InputLabel>2. Währung:</InputLabel>
-        <CurrencySelect
-          onSelect={(label) => {
-            dispatch(setSecondCurrency(label));
-            dispatch(fetchCurrencyValue({ symbol: label, index: 1 }));
-          }}
-        />
+        <CurrencySelect onSelect={(label) => handleCurrencyChange(label, 1)} />
+
         <Input
           name="secondValue"
           value={values[1]}
