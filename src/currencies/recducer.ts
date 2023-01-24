@@ -49,16 +49,14 @@ const currencySlice = createSlice({
       const newValue = parseFloat(value.replace(/\./g, "").replace(/,/g, "."));
 
       if (Number.isNaN(newValue)) {
-        // noinspection JSUnusedAssignment
-        values = initialState.values;
         return;
       }
 
       const options = { maximumFractionDigits: 2 };
       const stringValue = newValue.toLocaleString(undefined, options);
       if (selectedCurrencies[0] === selectedCurrencies[1]) {
-        // noinspection JSUnusedAssignment
-        values = [stringValue, stringValue];
+        values[0] = stringValue;
+        values[1] = stringValue;
         return;
       }
 
