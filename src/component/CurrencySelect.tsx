@@ -6,7 +6,7 @@ interface SelectProps {
   onSelect: (label: string) => void;
 }
 
-const Select: React.FC<SelectProps> = ({ onSelect }) => {
+const CurrencySelect: React.FC<SelectProps> = ({ onSelect }) => {
   const currencyValues = useSelector(selectCurrencies);
 
   return (
@@ -20,4 +20,4 @@ const Select: React.FC<SelectProps> = ({ onSelect }) => {
   );
 };
 
-export default Select;
+export default CurrencySelect;

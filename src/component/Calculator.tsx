@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
-import { Input } from "@mui/material";
-import Select from "./Select";
+import { Input, InputLabel } from "@mui/material";
+import CurrencySelect from "./CurrencySelect";
 import {
   calculateValue,
   fetchCurrencyValue,
@@ -22,8 +22,8 @@ const Calculator = () => {
   return (
     <div>
       <div>
-        1. Währung:
-        <Select
+        <InputLabel>1. Währung:</InputLabel>
+        <CurrencySelect
           onSelect={(label) => {
             dispatch(setFirstCurrency(label));
             dispatch(fetchCurrencyValue({ symbol: label, index: 0 }));
@@ -37,8 +37,8 @@ const Calculator = () => {
       </div>
 
       <div>
-        2. Währung:
-        <Select
+        <InputLabel>2. Währung:</InputLabel>
+        <CurrencySelect
           onSelect={(label) => {
             dispatch(setSecondCurrency(label));
             dispatch(fetchCurrencyValue({ symbol: label, index: 1 }));
