@@ -1,5 +1,6 @@
-import { Input, Paper } from "@mui/material";
+import { Card, Input } from "@mui/material";
 import React from "react";
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import CurrencySelect from "./CurrencySelect";
 
 interface CurrencyElementProps {
@@ -19,14 +20,22 @@ const CurrencyElement = ({
   onSelect,
   handleInputChange,
 }: CurrencyElementProps) => (
-  <Paper square elevation={12}>
-    <CurrencySelect
-      label={label}
-      value={selectedCurrency}
-      onSelect={onSelect}
-    />
-    <Input name={inputName} value={value} onChange={handleInputChange} />
-  </Paper>
+  <div>
+    <Card square elevation={12} style={{ display: "inline-block" }}>
+      <Grid container spacing={2} minHeight={160}>
+        <Grid xs={6} display="flex" justifyContent="center" alignItems="center">
+          <CurrencySelect
+            label={label}
+            value={selectedCurrency}
+            onSelect={onSelect}
+          />
+        </Grid>
+        <Grid xs={4} display="flex" justifyContent="center" alignItems="center">
+          <Input name={inputName} value={value} onChange={handleInputChange} />
+        </Grid>
+      </Grid>
+    </Card>
+  </div>
 );
 
 export default CurrencyElement;

@@ -29,7 +29,7 @@ const Calculator = () => {
   };
 
   return (
-    <Paper>
+    <Paper square elevation={5}>
       {[0, 1].map((index) => (
         <CurrencyElement
           key={`currency ${index}`}
