@@ -37,7 +37,7 @@ const Calculator = () => {
           onSelect={(label) => handleCurrencyChange(label, index)}
           value={values[index]}
           handleInputChange={handleInputChange}
-          label={`${index + 1} Währung`}
+          label={`${index + 1}. Währung`}
           inputName={`input_${index}`}
         />
       ))}

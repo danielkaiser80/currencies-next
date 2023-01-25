@@ -19,7 +19,7 @@ const CurrencyElement = ({
   onSelect,
   handleInputChange,
 }: CurrencyElementProps) => (
-  <Paper variant="outlined" square>
+  <Paper square elevation={12}>
     <CurrencySelect
       label={label}
       value={selectedCurrency}

@@ -3,30 +3,40 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.20.12",
     "@craco/craco": "^7.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.11.5",
     "@reduxjs/toolkit": "^1.9.1",
-    "@testing-library/dom": "^8.20.0",
-    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.11",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
     "axios": "^1.2.3",
+    "babel-jest": "^29.4.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-import-resolver-typescript": "^3.3.0",
+    "jest": "^29.4.0",
+    "jest-environment-jsdom": "^29.4.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
+    "prettier": "2.8.3",
     "react": "^18.2.0",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
+    "react-test-renderer": "^18.2.0",
+    "ts-jest": "^29.0.5",
     "typescript": "~4.9.4"
   },
   "proxy": "http://localhost:8080",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts,.tsx"
   },
@@ -51,9 +61,6 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-import-resolver-typescript": "^3.3.0",
-    "prettier": "2.8.3"
+    "@testing-library/jest-dom": "^5.16.5"
   }
 }
