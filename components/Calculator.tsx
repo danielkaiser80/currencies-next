@@ -5,7 +5,7 @@ import {
   calculateValue,
   fetchCurrencyValue,
   setCurrency,
-} from "../currencies/recducer";
+} from "../app/recducer";
 import {
   selectSelectedCurrencies,
   selectValues,

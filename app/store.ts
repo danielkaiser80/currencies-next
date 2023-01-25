@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import reducer from "../currencies/recducer";
+import reducer from "./recducer";
 
 const store = configureStore({
   // as we have only one reducer, we need not nest here.

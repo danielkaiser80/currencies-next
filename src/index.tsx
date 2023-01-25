@@ -1,10 +1,10 @@
-import React from "react";
-import "./index.css";
+import "../styles/global.css";
 import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
-import App from "./App";
-import store from "./app/store";
-import { fetchCurrencies } from "./currencies/recducer";
+import App from "../pages";
+import store from "../app/store";
+import { fetchCurrencies } from "../app/recducer";
+import { StrictMode } from "react";
 
 async function main() {
   store.dispatch(fetchCurrencies());
@@ -15,11 +15,11 @@ async function main() {
   const root = createRoot(container);
 
   root.render(
-    <React.StrictMode>
+    <StrictMode>
       <Provider store={store}>
         <App />
       </Provider>
-    </React.StrictMode>
+    </StrictMode>
   );
 }
 
