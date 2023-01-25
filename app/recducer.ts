@@ -1,9 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   defaultCode,
   fetchAllIsoCodes,
   fetchCurrencyForSymbol,
 } from "../service/BackendService";
+import { HYDRATE } from "next-redux-wrapper";
 
 interface CurrencyState {
   currencies: Array<string>;
@@ -24,6 +25,8 @@ export const fetchCurrencyValue = createAsyncThunk(
     index,
   })
 );
+
+const hydrate = createAction<CurrencyState>(HYDRATE);
 
 const initialState: CurrencyState = {
   currencies: [defaultCode],
@@ -70,6 +73,12 @@ const currencySlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(hydrate, (state, action) => {
+        return {
+          ...state,
+          ...action.payload,
+        };
+      })
       .addCase(fetchCurrencies.fulfilled, (state, action) => {
         state.currencies = action.payload;
       })
