@@ -19,7 +19,7 @@ const Calculator = () => {
 
   useEffect(() => {
     fetchAllIsoCodes().then(setIsoCodes);
-  });
+  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,7 +33,6 @@ const Calculator = () => {
     const stringValue = newValue.toLocaleString(undefined, options);
     if (selectedCurrencies[0] === selectedCurrencies[1]) {
       setValues([stringValue, stringValue]);
-
       return;
     }
 
