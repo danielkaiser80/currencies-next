@@ -1,16 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Box, InputLabel, MenuItem, Select } from "@mui/material";
-import { selectCurrencies } from "../app/store";
 
 interface SelectProps {
+  isoCodes: string[];
   label: string;
   value: string;
   onSelect: (label: string) => void;
 }
 
-const CurrencySelect: React.FC<SelectProps> = ({ label, value, onSelect }) => {
-  const currencyValues = useSelector(selectCurrencies);
+const CurrencySelect: React.FC<SelectProps> = ({
+  isoCodes,
+  label,
+  value,
+  onSelect,
+}) => {
   const idLabel = `${label}label`;
 
   return (
@@ -22,7 +25,7 @@ const CurrencySelect: React.FC<SelectProps> = ({ label, value, onSelect }) => {
         value={value}
         onChange={(e) => onSelect(e.target.value as string)}
       >
-        {currencyValues.map((item) => (
+        {isoCodes.map((item) => (
           <MenuItem key={item} value={item}>
             {item}
           </MenuItem>

@@ -4,6 +4,7 @@ import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import CurrencySelect from "./CurrencySelect";
 
 interface CurrencyElementProps {
+  isoCodes: string[];
   selectedCurrency: string;
   label: string;
   inputName: string;
@@ -13,6 +14,7 @@ interface CurrencyElementProps {
 }
 
 const CurrencyElement = ({
+  isoCodes,
   selectedCurrency,
   label,
   inputName,
@@ -28,6 +30,7 @@ const CurrencyElement = ({
             label={label}
             value={selectedCurrency}
             onSelect={onSelect}
+            isoCodes={isoCodes}
           />
         </Grid>
         <Grid xs={4} display="flex" justifyContent="center" alignItems="center">

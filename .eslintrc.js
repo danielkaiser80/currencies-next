@@ -1,9 +1,9 @@
 module.exports = {
   extends: [
-    "react-app",
     "airbnb",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@next/next/recommended",
     "prettier",
   ],
   overrides: [
@@ -24,6 +24,7 @@ module.exports = {
             tsx: "never",
           },
         ],
+        "react/react-in-jsx-scope": "off",
       },
     },
   ],
@@ -46,7 +47,5 @@ module.exports = {
       },
     ],
     "no-console": ["off"],
-    // switch off as we have the immer library with redux; still we don't want this anywhere
-    'no-param-reassign': ['off'],
   },
 };
