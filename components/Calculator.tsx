@@ -7,9 +7,13 @@ import {
   fetchAllIsoCodes,
   fetchCurrencyForSymbol,
 } from "../service/BackendService";
+import { HTMLNumericElement } from "./NumericInput";
 
 const Calculator = () => {
-  const [values, setValues] = useState(["", ""]);
+  const [values, setValues] = useState<[number | null, number | null]>([
+    null,
+    null,
+  ]);
   const [selectedCurrencies, setSelectedCurrencies] = useState([
     defaultCode,
     defaultCode,
@@ -21,30 +25,25 @@ const Calculator = () => {
     fetchAllIsoCodes().then(setIsoCodes);
   }, []);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLNumericElement>) => {
     const { name, value } = e.target;
-    const newValue = parseFloat(value.replace(/\./g, "").replace(/,/g, "."));
 
-    if (Number.isNaN(newValue)) {
+    if (!value) {
+      setValues([null, null]);
       return;
     }
 
-    const options = { maximumFractionDigits: 2 };
-    const stringValue = newValue.toLocaleString(undefined, options);
     if (selectedCurrencies[0] === selectedCurrencies[1]) {
-      setValues([stringValue, stringValue]);
+      setValues([value, value]);
       return;
     }
 
     // the name is `input_${index}`
     const index = parseInt(name.slice(-1), 10);
-    const otherIndex = 1 - index;
+    const otherValue =
+      (value / exchangeRates[index]) * exchangeRates[1 - index];
 
-    values[index] = stringValue;
-    values[otherIndex] = (
-      (newValue / exchangeRates[index]) *
-      exchangeRates[otherIndex]
-    ).toLocaleString(undefined, options);
+    setValues(() => (index === 0 ? [value, otherValue] : [otherValue, value]));
   };
 
   const handleCurrencyChange = async (label: string, index: number) => {
@@ -53,7 +52,7 @@ const Calculator = () => {
       newState[index] = label;
       return newState;
     });
-    setValues(["", ""]);
+    setValues([null, null]);
 
     const exchangeRate = (await fetchCurrencyForSymbol(label)).value;
     setExchangeRate((prevState) => {

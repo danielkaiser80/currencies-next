@@ -1,16 +1,17 @@
-import { Card, Input } from "@mui/material";
+import { Card } from "@mui/material";
 import React from "react";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import CurrencySelect from "./CurrencySelect";
+import NumericInput, { HTMLNumericElement } from "./NumericInput";
 
 interface CurrencyElementProps {
   isoCodes: string[];
   selectedCurrency: string;
   label: string;
   inputName: string;
-  value: string;
+  value: number | null;
   onSelect: (isoCode: string) => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => unknown;
+  handleInputChange: (e: React.ChangeEvent<HTMLNumericElement>) => void;
 }
 
 const CurrencyElement = ({
@@ -34,7 +35,14 @@ const CurrencyElement = ({
           />
         </Grid>
         <Grid xs={4} display="flex" justifyContent="center" alignItems="center">
-          <Input name={inputName} value={value} onChange={handleInputChange} />
+          <NumericInput
+            name={inputName}
+            value={value}
+            onChange={handleInputChange}
+            decimalChar=","
+            precision={2}
+            thousandChar="."
+          />
         </Grid>
       </Grid>
     </Card>

@@ -46,6 +46,7 @@ module.exports = {
         unnamedComponents: "arrow-function",
       },
     ],
-    "no-console": ["off"],
+    "no-console": "off",
+    "react/jsx-props-no-spreading": "off",
   },
 };
