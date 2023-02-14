@@ -9,8 +9,10 @@ import {
 } from "../service/BackendService";
 import { HTMLNumericElement } from "./NumericInput";
 
+type NullableNumber = number | null;
+
 const Calculator = () => {
-  const [values, setValues] = useState<[number | null, number | null]>([
+  const [values, setValues] = useState<[NullableNumber, NullableNumber]>([
     null,
     null,
   ]);
