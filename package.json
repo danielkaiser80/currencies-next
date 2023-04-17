@@ -19,7 +19,7 @@
     "@types/jest": "^29.5.0",
     "eslint": "^8.34.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-import-resolver-typescript": "^3.3.0",
     "eslint-webpack-plugin": "^4.0.0",
