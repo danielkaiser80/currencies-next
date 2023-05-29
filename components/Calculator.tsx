@@ -3,7 +3,7 @@ import { Paper } from "@mui/material";
 
 import CurrencyElement from "./CurrencyElement";
 import {
-  defaultCode,
+  DEFAULT_CODE,
   fetchAllIsoCodes,
   fetchCurrencyForSymbol,
 } from "../service/BackendService";
@@ -17,8 +17,8 @@ const Calculator = () => {
     null,
   ]);
   const [selectedCurrencies, setSelectedCurrencies] = useState([
-    defaultCode,
-    defaultCode,
+    DEFAULT_CODE,
+    DEFAULT_CODE,
   ]);
   const [exchangeRates, setExchangeRate] = useState([1, 1]);
   const [isoCodes, setIsoCodes] = useState<string[]>(["EUR"]);

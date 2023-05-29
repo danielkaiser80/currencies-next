@@ -5,15 +5,16 @@ export interface Currency {
   value: number;
 }
 
-export const defaultCode = "EUR";
+export const DEFAULT_CODE = "EUR";
 
+const BASE_URL = "http://localhost:8080/currencies";
 export const fetchAllIsoCodes: () => Promise<string[]> = async () => {
   try {
     const response = await axios.get<Array<Currency>>(
-      "http://localhost:8080/currencies"
+      BASE_URL
     );
     const currencies = response.data.map(({ isoCode }) => isoCode);
-    currencies.unshift(defaultCode);
+    currencies.unshift(DEFAULT_CODE);
     return currencies;
   } catch (error) {
     // TODO add useful error handling, as the app makes no sense without the backend
@@ -27,14 +28,14 @@ export const fetchAllIsoCodes: () => Promise<string[]> = async () => {
 export const fetchCurrencyForSymbol = async (
   symbol: string
 ): Promise<{ isoCode: string; value: number }> => {
-  if (symbol === defaultCode) {
-    return { isoCode: defaultCode, value: 1 };
+  if (symbol === DEFAULT_CODE) {
+    return { isoCode: DEFAULT_CODE, value: 1 };
   }
   const { isoCode, value } = (
     await axios.get<{
       isoCode: string;
       value: string;
-    }>(`http://localhost:8080/currencies/${symbol}`)
+    }>(`${BASE_URL}/${symbol}`)
   ).data;
   return { isoCode, value: parseFloat(value) };
 };
