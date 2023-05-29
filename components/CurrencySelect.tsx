@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, InputLabel, MenuItem, Select } from "@mui/material";
 
 interface SelectProps {
@@ -8,12 +7,7 @@ interface SelectProps {
   onSelect: (label: string) => void;
 }
 
-const CurrencySelect: React.FC<SelectProps> = ({
-  isoCodes,
-  label,
-  value,
-  onSelect,
-}) => {
+const CurrencySelect = ({ isoCodes, label, value, onSelect }: SelectProps) => {
   const idLabel = `${label}label`;
 
   return (

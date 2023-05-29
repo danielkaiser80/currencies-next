@@ -1,6 +1,6 @@
 import { Card } from "@mui/material";
-import React from "react";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import { ChangeEvent } from "react";
 import CurrencySelect from "./CurrencySelect";
 import NumericInput, { HTMLNumericElement } from "./NumericInput";
 
@@ -11,7 +11,7 @@ interface CurrencyElementProps {
   inputName: string;
   value: number | null;
   onSelect: (isoCode: string) => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLNumericElement>) => void;
+  handleInputChange: (e: ChangeEvent<HTMLNumericElement>) => void;
 }
 
 const CurrencyElement = ({

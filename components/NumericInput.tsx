@@ -1,6 +1,6 @@
 import type { TextFieldProps } from "@mui/material";
 import { TextField } from "@mui/material";
-import React, { useMemo } from "react";
+import { ChangeEvent, KeyboardEvent, useMemo } from "react";
 
 export interface HTMLNumericElement
   extends Omit<HTMLInputElement, "value" | "name"> {
@@ -14,7 +14,7 @@ export type NumericInputProps = Omit<TextFieldProps, "onChange"> & {
   decimalChar: string;
   value: number | string | null;
   name: string;
-  onChange: (e: React.ChangeEvent<HTMLNumericElement>) => void;
+  onChange: (e: ChangeEvent<HTMLNumericElement>) => void;
 };
 
 const verifyNumber = (string: string) => {
@@ -38,12 +38,12 @@ const allowedKeys = [
   "U+007F", // 'forward delete on macOS'
 ];
 
-type KeyboardEvent = React.KeyboardEvent<HTMLInputElement>;
+type KeyEventE = KeyboardEvent<HTMLInputElement>;
 
-const shouldIgnoreKeyPress = (e: KeyboardEvent) =>
+const shouldIgnoreKeyPress = (e: KeyEventE) =>
   e.ctrlKey || e.shiftKey || e.metaKey || allowedKeys.includes(e.key);
 
-const handleKeyDown = (e: KeyboardEvent): void => {
+const handleKeyDown = (e: KeyEventE): void => {
   if (e.key === " ") e.preventDefault();
 
   if (shouldIgnoreKeyPress(e)) {
@@ -87,8 +87,8 @@ const NumericInput = ({
       .replace(",", decimalChar)
       .replaceAll(".", thousandChar);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newEvent: React.ChangeEvent<HTMLNumericElement> = {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const newEvent: ChangeEvent<HTMLNumericElement> = {
       ...e,
       currentTarget: {
         ...e.currentTarget,
