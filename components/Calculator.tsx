@@ -1,17 +1,18 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Paper } from "@mui/material";
 
 import CurrencyElement from "./CurrencyElement";
 import {
   DEFAULT_CODE,
-  fetchAllIsoCodes,
   fetchCurrencyForSymbol,
 } from "../service/BackendService";
 import { HTMLNumericElement } from "./NumericInput";
+import type { HomeProps } from "../pages";
 
 type NullableNumber = number | null;
+type CalculatorProps = HomeProps;
 
-const Calculator = () => {
+const Calculator = ({ isoCodes }: CalculatorProps) => {
   const [values, setValues] = useState<[NullableNumber, NullableNumber]>([
     null,
     null,
@@ -21,11 +22,6 @@ const Calculator = () => {
     DEFAULT_CODE,
   ]);
   const [exchangeRates, setExchangeRate] = useState([1, 1]);
-  const [isoCodes, setIsoCodes] = useState<string[]>(["EUR"]);
-
-  useEffect(() => {
-    fetchAllIsoCodes().then(setIsoCodes);
-  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLNumericElement>) => {
     const { name, value } = e.target;
