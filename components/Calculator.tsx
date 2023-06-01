@@ -44,7 +44,7 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
     setValues(() => (index === 0 ? [value, otherValue] : [otherValue, value]));
   };
 
-  const handleCurrencyChange = async (label: string, index: number) => {
+  const handleCurrencyChange = (label: string, index: number) => {
     setSelectedCurrencies((prevState) => {
       const newState = [...prevState];
       newState[index] = label;
@@ -52,12 +52,19 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
     });
     setValues([null, null]);
 
-    const exchangeRate = (await fetchCurrencyForSymbol(label)).value;
-    setExchangeRate((prevState) => {
-      const newState = [...prevState];
-      newState[index] = exchangeRate;
-      return newState;
-    });
+    fetchCurrencyForSymbol(label)
+      .then((rate) => {
+        setExchangeRate((prevState) => {
+          const newState = [...prevState];
+          newState[index] = rate.value;
+          return newState;
+        });
+      })
+      .catch((reason) => {
+        console.error(reason);
+        // reset the exchange rate
+        setExchangeRate([1, 1]);
+      });
   };
 
   return (

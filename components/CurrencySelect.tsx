@@ -17,7 +17,7 @@ const CurrencySelect = ({ isoCodes, label, value, onSelect }: SelectProps) => {
         id={label}
         labelId={idLabel}
         value={value}
-        onChange={(e) => onSelect(e.target.value as string)}
+        onChange={(e) => onSelect(e.target.value)}
       >
         {isoCodes.map((item) => (
           <MenuItem key={item} value={item}>
