@@ -52,6 +52,7 @@ const handleKeyDown = (e: KeyEventE): void => {
 
   if (!verifyNumber(e.key).isNumber) e.preventDefault();
 };
+
 const NumericInput = ({
   value = null,
   precision,
@@ -63,10 +64,19 @@ const NumericInput = ({
 }: NumericInputProps) => {
   const defaultValue = value === null ? NaN : Number(value);
 
+  const userLang = useMemo(() => {
+    if (typeof window !== "undefined") {
+      if (typeof window.navigator.languages !== "undefined")
+        return window.navigator.languages[0];
+      return window.navigator.language;
+    }
+    // fallback to German for simplicity
+    return "de-DE";
+  }, []);
+
   const formatter = useMemo(
     () =>
-      // TODO make i18n here
-      new Intl.NumberFormat("de-DE", {
+      new Intl.NumberFormat(userLang, {
         minimumFractionDigits: precision,
         maximumFractionDigits: precision,
       }),
