@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { Paper } from "@mui/material";
 
+import { useImmer } from "use-immer";
 import CurrencyElement from "./CurrencyElement";
 import {
   DEFAULT_CODE,
@@ -17,11 +18,11 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
     null,
     null,
   ]);
-  const [selectedCurrencies, setSelectedCurrencies] = useState([
+  const [selectedCurrencies, updateSelectedCurrencies] = useImmer([
     DEFAULT_CODE,
     DEFAULT_CODE,
   ]);
-  const [exchangeRates, setExchangeRate] = useState([1, 1]);
+  const [exchangeRates, updateExchangeRate] = useImmer([1, 1]);
 
   const handleInputChange = (e: ChangeEvent<HTMLNumericElement>) => {
     const { name, value } = e.target;
@@ -45,25 +46,21 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
   };
 
   const handleCurrencyChange = (label: string, index: number) => {
-    setSelectedCurrencies((prevState) => {
-      const newState = [...prevState];
-      newState[index] = label;
-      return newState;
+    updateSelectedCurrencies((draft) => {
+      draft[index] = label;
     });
     setValues([null, null]);
 
     fetchCurrencyForSymbol(label)
       .then((rate) => {
-        setExchangeRate((prevState) => {
-          const newState = [...prevState];
-          newState[index] = rate.value;
-          return newState;
+        updateExchangeRate((draft) => {
+          draft[index] = rate.value;
         });
       })
       .catch((reason) => {
         console.error(reason);
         // reset the exchange rate
-        setExchangeRate([1, 1]);
+        updateExchangeRate([1, 1]);
       });
   };
 

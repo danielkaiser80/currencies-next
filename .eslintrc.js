@@ -25,6 +25,10 @@ module.exports = {
           },
         ],
         "react/react-in-jsx-scope": "off",
+        "no-param-reassign": [
+          "error",
+          { props: true, ignorePropertyModificationsFor: ["draft"] },
+        ],
       },
     },
   ],
