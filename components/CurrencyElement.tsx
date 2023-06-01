@@ -24,9 +24,15 @@ const CurrencyElement = ({
   handleInputChange,
 }: CurrencyElementProps) => (
   <div>
-    <Card square elevation={12} style={{ display: "inline-block" }}>
-      <Grid container spacing={2} minHeight={160}>
-        <Grid xs={6} display="flex" justifyContent="center" alignItems="center">
+    <Card square elevation={12} sx={{ display: "inline-block", padding: 3 }}>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-end"
+      >
+        <Grid xs={6}>
           <CurrencySelect
             label={label}
             value={selectedCurrency}
@@ -34,7 +40,7 @@ const CurrencyElement = ({
             isoCodes={isoCodes}
           />
         </Grid>
-        <Grid xs={4} display="flex" justifyContent="center" alignItems="center">
+        <Grid xs={4}>
           <NumericInput
             name={inputName}
             value={value}
