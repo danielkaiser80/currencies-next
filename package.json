@@ -40,7 +40,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "prettier": "2.8.8",
     "typescript": "^5.0.4",
-    "webpack": "^5.84.1"
+    "webpack": "^5.85.1"
   },
   "proxy": "http://localhost:8080",
   "scripts": {
