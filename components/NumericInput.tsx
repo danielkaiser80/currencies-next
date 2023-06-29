@@ -117,6 +117,7 @@ const NumericInput = ({
     numericRepresentation = numericRepresentation.replace(decimalChar, "");
 
     if (numericRepresentation === "") {
+      // eslint-disable-next-line no-param-reassign
       e.target.value = "";
       newEvent.target.value = null;
       newEvent.currentTarget.value = null;
@@ -132,6 +133,7 @@ const NumericInput = ({
       newEvent.target.value = withPrecision;
       newEvent.currentTarget.value = withPrecision;
 
+      // eslint-disable-next-line no-param-reassign
       e.target.value = formattedNumber;
 
       onChange(newEvent);
