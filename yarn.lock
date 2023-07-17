@@ -2325,12 +2325,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:^13.4.7":
-  version: 13.4.7
-  resolution: "@next/eslint-plugin-next@npm:13.4.7"
+"@next/eslint-plugin-next@npm:^13.4.10":
+  version: 13.4.10
+  resolution: "@next/eslint-plugin-next@npm:13.4.10"
   dependencies:
     glob: 7.1.7
-  checksum: 7c9d6d3a44355dfda06982057a309502284add7d9e7a375782e24551f8faab726b7d4d260a053182f536f0928bf5b9c26b81267c437dc3e716a7acd70fd5b1a3
+  checksum: f14b99eb5d33b6ede9666ffafb596ee6be52157fc87b59d10d94e44b1e9836099ad450a67558c2aecf09c84b55f65a33c9254ab72df33f55f7cc9f4abee7b38c
   languageName: node
   linkType: hard
 
@@ -4097,7 +4097,7 @@ __metadata:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
     "@mui/material": ^5.13.6
-    "@next/eslint-plugin-next": ^13.4.7
+    "@next/eslint-plugin-next": ^13.4.10
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@types/jest": ^29.5.2
