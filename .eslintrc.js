@@ -31,6 +31,15 @@ module.exports = {
         ],
       },
     },
+    {
+      files: ["jest.setup.ts"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
   ],
   settings: {
     "import/parsers": {
