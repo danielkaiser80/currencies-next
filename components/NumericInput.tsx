@@ -81,7 +81,7 @@ const NumericInput = ({
         maximumFractionDigits: precision,
       }),
 
-    [thousandChar, decimalChar]
+    [userLang, precision]
   );
 
   if (!decimalChar) {
