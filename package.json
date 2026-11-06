@@ -54,6 +54,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "jest --watch",
-    "test:ci": "jest --ci"
+    "test:ci": "jest --ci",
+    "test:cov": "jest --ci --coverage"
   }
 }
