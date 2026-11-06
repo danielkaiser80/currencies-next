@@ -15,9 +15,8 @@ export const fetchAllIsoCodes: () => Promise<string[]> = async () => {
     currencies.unshift(DEFAULT_CODE);
     return currencies;
   } catch (error) {
-    // TODO add useful error handling, as the app makes no sense without the backend
     console.log(error);
-    // simply return empty array
+    // the calculator shows an error for the empty array
     return [];
   }
 };
@@ -34,5 +33,9 @@ export const fetchCurrencyForSymbol = async (
       value: string;
     }>(`${BASE_URL}/${symbol}`)
   ).data;
-  return { isoCode, value: Number.parseFloat(value) };
+  const rate = Number.parseFloat(value);
+  if (!Number.isFinite(rate) || rate <= 0) {
+    throw new Error(`Invalid exchange rate for ${symbol}: ${value}`);
+  }
+  return { isoCode, value: rate };
 };
