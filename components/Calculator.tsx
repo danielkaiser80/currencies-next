@@ -1,5 +1,5 @@
-import { ChangeEvent, useState } from "react";
-import { Paper } from "@mui/material";
+import { ChangeEvent, useRef, useState } from "react";
+import { Alert, Button, Paper } from "@mui/material";
 
 import { useImmer } from "use-immer";
 import CurrencyElement from "./CurrencyElement";
@@ -22,7 +22,18 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
     DEFAULT_CODE,
     DEFAULT_CODE,
   ]);
-  const [exchangeRates, updateExchangeRate] = useImmer([1, 1]);
+  // a rate is null while it is loading or after loading it failed
+  const [exchangeRates, updateExchangeRate] = useImmer<
+    [NullableNumber, NullableNumber]
+  >([1, 1]);
+  const [failedCurrencies, updateFailedCurrencies] = useImmer<
+    [string | null, string | null]
+  >([null, null]);
+  const latestRequests = useRef([0, 0]);
+
+  const sameCurrency = selectedCurrencies[0] === selectedCurrencies[1];
+  const canConvert =
+    sameCurrency || (exchangeRates[0] !== null && exchangeRates[1] !== null);
 
   const handleInputChange = (e: ChangeEvent<HTMLNumericElement>) => {
     const { name, value } = e.target;
@@ -32,17 +43,53 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
       return;
     }
 
-    if (selectedCurrencies[0] === selectedCurrencies[1]) {
+    if (sameCurrency) {
       setValues([value, value]);
       return;
     }
 
     // the name is `input_${index}`
     const index = Number.parseInt(name.slice(-1), 10);
-    const otherValue =
-      (value / exchangeRates[index]) * exchangeRates[1 - index];
+    const rate = exchangeRates[index];
+    const otherRate = exchangeRates[1 - index];
+    if (rate === null || otherRate === null) {
+      return;
+    }
+    const otherValue = (value / rate) * otherRate;
 
     setValues(() => (index === 0 ? [value, otherValue] : [otherValue, value]));
+  };
+
+  const loadExchangeRate = (label: string, index: number) => {
+    updateExchangeRate((draft) => {
+      draft[index] = null;
+    });
+    updateFailedCurrencies((draft) => {
+      draft[index] = null;
+    });
+
+    latestRequests.current[index] += 1;
+    const request = latestRequests.current[index];
+
+    fetchCurrencyForSymbol(label)
+      .then((rate) => {
+        // ignore the response if another currency was selected in the meantime
+        if (latestRequests.current[index] !== request) {
+          return;
+        }
+        updateExchangeRate((draft) => {
+          draft[index] = rate.value;
+        });
+      })
+      .catch((reason) => {
+        console.error(reason);
+        if (latestRequests.current[index] !== request) {
+          return;
+        }
+        updateFailedCurrencies((draft) => {
+          draft[index] = label;
+        });
+      });
   };
 
   const handleCurrencyChange = (label: string, index: number) => {
@@ -50,35 +97,62 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
       draft[index] = label;
     });
     setValues([null, null]);
-
-    fetchCurrencyForSymbol(label)
-      .then((rate) => {
-        updateExchangeRate((draft) => {
-          draft[index] = rate.value;
-        });
-      })
-      .catch((reason) => {
-        console.error(reason);
-        // reset the exchange rate
-        updateExchangeRate([1, 1]);
-      });
+    loadExchangeRate(label, index);
   };
 
+  const retryFailedCurrency = (code: string) => {
+    failedCurrencies.forEach((failedCode, index) => {
+      if (failedCode === code) {
+        loadExchangeRate(code, index);
+      }
+    });
+  };
+
+  const failedCodes = Array.from(
+    new Set(failedCurrencies.filter((code) => code !== null)),
+  );
+
   return (
-    <Paper square elevation={5}>
-      {[0, 1].map((index) => (
-        <CurrencyElement
-          key={`currency ${index}`}
-          selectedCurrency={selectedCurrencies[index]}
-          onSelect={(label) => handleCurrencyChange(label, index)}
-          value={values[index]}
-          handleInputChange={handleInputChange}
-          label={`${index + 1}. Währung`}
-          inputName={`input_${index}`}
-          isoCodes={isoCodes}
-        />
+    <>
+      {isoCodes.length === 0 && (
+        <Alert severity="error">
+          Die Währungen konnten nicht geladen werden.
+        </Alert>
+      )}
+      {failedCodes.map((code) => (
+        <Alert
+          key={code}
+          severity="error"
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => retryFailedCurrency(code)}
+            >
+              Erneut versuchen
+            </Button>
+          }
+        >
+          Der Kurs für {code} konnte nicht geladen werden. Bitte später erneut
+          versuchen.
+        </Alert>
       ))}
-    </Paper>
+      <Paper square elevation={5}>
+        {[0, 1].map((index) => (
+          <CurrencyElement
+            key={`currency ${index}`}
+            selectedCurrency={selectedCurrencies[index]}
+            onSelect={(label) => handleCurrencyChange(label, index)}
+            value={values[index]}
+            handleInputChange={handleInputChange}
+            label={`${index + 1}. Währung`}
+            inputName={`input_${index}`}
+            isoCodes={isoCodes}
+            inputDisabled={!canConvert}
+          />
+        ))}
+      </Paper>
+    </>
   );
 };
 

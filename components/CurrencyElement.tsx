@@ -10,6 +10,7 @@ interface CurrencyElementProps {
   label: string;
   inputName: string;
   value: number | null;
+  inputDisabled: boolean;
   onSelect: (isoCode: string) => void;
   handleInputChange: (e: ChangeEvent<HTMLNumericElement>) => void;
 }
@@ -20,6 +21,7 @@ const CurrencyElement = ({
   label,
   inputName,
   value,
+  inputDisabled,
   onSelect,
   handleInputChange,
 }: CurrencyElementProps) => (
@@ -44,6 +46,7 @@ const CurrencyElement = ({
           <NumericInput
             name={inputName}
             value={value}
+            disabled={inputDisabled}
             onChange={handleInputChange}
             decimalChar=","
             precision={2}
