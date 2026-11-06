@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and migrated to NextJS.
+A currency calculator built with [Next.js](https://nextjs.org/).
 
 ## Getting Started
 
