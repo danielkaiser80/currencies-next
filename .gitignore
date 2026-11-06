@@ -24,3 +24,4 @@ npm-debug.log*
 # NextJS
 .next
 next-env.d.ts
+AGENTS.md
