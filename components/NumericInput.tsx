@@ -28,7 +28,7 @@ const verifyNumber = (string: string) => {
   };
 };
 
-const allowedKeys = [
+const allowedKeys = new Set([
   "Backspace",
   "Enter",
   "Tab",
@@ -36,12 +36,12 @@ const allowedKeys = [
   "ArrowLeft",
   "ArrowRight",
   "U+007F", // 'forward delete on macOS'
-];
+]);
 
 type KeyEventE = KeyboardEvent<HTMLInputElement>;
 
 const shouldIgnoreKeyPress = (e: KeyEventE) =>
-  e.ctrlKey || e.shiftKey || e.metaKey || allowedKeys.includes(e.key);
+  e.ctrlKey || e.shiftKey || e.metaKey || allowedKeys.has(e.key);
 
 const handleKeyDown = (e: KeyEventE): void => {
   if (e.key === " ") e.preventDefault();
@@ -66,7 +66,7 @@ const NumericInput = ({
 
   const userLang = useMemo(() => {
     if (typeof window !== "undefined") {
-      if (typeof window.navigator.languages !== "undefined")
+      if (window.navigator.languages !== undefined)
         return window.navigator.languages[0];
       return window.navigator.language;
     }
@@ -81,7 +81,7 @@ const NumericInput = ({
         maximumFractionDigits: precision,
       }),
 
-    [userLang, precision]
+    [userLang, precision],
   );
 
   if (!decimalChar) {
