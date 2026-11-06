@@ -62,7 +62,7 @@ const NumericInput = ({
   onChange,
   ...inputProps
 }: NumericInputProps) => {
-  const defaultValue = value === null ? NaN : Number(value);
+  const defaultValue = value === null ? Number.NaN : Number(value);
 
   const userLang = useMemo(() => {
     if (typeof window !== "undefined") {
