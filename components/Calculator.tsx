@@ -1,10 +1,12 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { Alert, Button, Paper } from "@mui/material";
 
+import useSWR from "swr";
 import { useImmer } from "use-immer";
 import CurrencyElement from "./CurrencyElement";
 import {
   DEFAULT_CODE,
+  fetchAllIsoCodes,
   fetchCurrencyForSymbol,
 } from "../service/BackendService";
 import { HTMLNumericElement } from "./NumericInput";
@@ -13,7 +15,13 @@ import type { HomeProps } from "../pages";
 type NullableNumber = number | null;
 type CalculatorProps = HomeProps;
 
-const Calculator = ({ isoCodes }: CalculatorProps) => {
+const Calculator = ({ isoCodes: initialIsoCodes }: CalculatorProps) => {
+  // the page is built statically, so check the backend again in the browser
+  const { data: isoCodes = initialIsoCodes, error: backendError } = useSWR(
+    "isoCodes",
+    fetchAllIsoCodes,
+    { fallbackData: initialIsoCodes, revalidateOnMount: true },
+  );
   const [values, setValues] = useState<[NullableNumber, NullableNumber]>([
     null,
     null,
@@ -114,9 +122,10 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
 
   return (
     <>
-      {isoCodes.length === 0 && (
-        <Alert severity="error">
-          Die Währungen konnten nicht geladen werden.
+      {backendError && (
+        <Alert severity="warning">
+          Der Server ist nicht erreichbar, daher sind keine aktuellen Kurse
+          verfügbar. Die historischen Währungen funktionieren weiterhin.
         </Alert>
       )}
       {failedCodes.map((code) => (

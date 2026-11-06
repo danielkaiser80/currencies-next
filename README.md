@@ -8,7 +8,8 @@ Install the dependencies with [npm](https://docs.npmjs.com/):
 npm install
 ```
 
-The app fetches its data from a backend at `http://localhost:8080/currencies`.
+The app fetches current exchange rates from a backend at `http://localhost:8080/currencies`.
+The former euro area currencies use their fixed conversion rates, so they also work without the backend.
 
 ## Available Scripts
 

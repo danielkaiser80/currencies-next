@@ -1,14 +1,38 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { ReactNode } from "react";
+import { SWRConfig } from "swr";
 import Calculator from "../components/Calculator";
-import { fetchCurrencyForSymbol } from "../service/BackendService";
+import {
+  fetchAllIsoCodes,
+  fetchCurrencyForSymbol,
+} from "../service/BackendService";
 
 jest.mock("../service/BackendService", () => ({
   DEFAULT_CODE: "EUR",
+  fetchAllIsoCodes: jest.fn(),
   fetchCurrencyForSymbol: jest.fn(),
 }));
 
 const fetchRate = jest.mocked(fetchCurrencyForSymbol);
+const fetchIsoCodes = jest.mocked(fetchAllIsoCodes);
 const isoCodes = ["EUR", "USD", "CHF"];
+
+const renderCalculator = async (codes = isoCodes) => {
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <SWRConfig
+      value={{
+        provider: () => new Map(),
+        dedupingInterval: 0,
+        shouldRetryOnError: false,
+      }}
+    >
+      {children}
+    </SWRConfig>
+  );
+  render(<Calculator isoCodes={codes} />, { wrapper });
+  // let the currency list request settle
+  await act(async () => {});
+};
 
 const input = (index: number) =>
   document.querySelector<HTMLInputElement>(`input[name=input_${index}]`)!;
@@ -27,6 +51,8 @@ const retry = async () => {
 
 beforeEach(() => {
   fetchRate.mockReset();
+  fetchIsoCodes.mockReset();
+  fetchIsoCodes.mockImplementation(async () => isoCodes);
   jest.spyOn(console, "error").mockImplementation(() => {});
 });
 
@@ -36,7 +62,7 @@ afterEach(() => {
 
 test("converts with the loaded exchange rate", async () => {
   fetchRate.mockResolvedValue({ isoCode: "USD", value: 2 });
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
   fireEvent.change(input(0), { target: { value: "12" } });
@@ -48,7 +74,7 @@ test("converts with the loaded exchange rate", async () => {
 
 test("shows an error instead of converting when loading a rate fails", async () => {
   fetchRate.mockRejectedValue(new Error("Network Error"));
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
 
@@ -62,7 +88,7 @@ test("shows an error instead of converting when loading a rate fails", async () 
 test("recovers when another currency loads after a failure", async () => {
   fetchRate.mockRejectedValueOnce(new Error("Network Error"));
   fetchRate.mockResolvedValueOnce({ isoCode: "CHF", value: 4 });
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
   await select(1, "CHF");
@@ -75,7 +101,7 @@ test("recovers when another currency loads after a failure", async () => {
 test("loads the rate again when retrying after a failure", async () => {
   fetchRate.mockRejectedValueOnce(new Error("Network Error"));
   fetchRate.mockResolvedValueOnce({ isoCode: "USD", value: 2 });
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
   await retry();
@@ -89,7 +115,7 @@ test("loads the rate again when retrying after a failure", async () => {
 
 test("keeps showing the error when retrying fails again", async () => {
   fetchRate.mockRejectedValue(new Error("Network Error"));
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
   await retry();
@@ -103,7 +129,7 @@ test("retries every field showing the failed currency", async () => {
   fetchRate.mockRejectedValueOnce(new Error("Network Error"));
   fetchRate.mockRejectedValueOnce(new Error("Network Error"));
   fetchRate.mockResolvedValue({ isoCode: "USD", value: 2 });
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(0, "USD");
   await select(1, "USD");
@@ -125,7 +151,7 @@ test("disables the inputs while a rate is loading", async () => {
       resolveRate = resolve;
     }),
   );
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
   expect(input(0)).toBeDisabled();
@@ -142,7 +168,7 @@ test("ignores the response of an outdated currency selection", async () => {
     }),
   );
   fetchRate.mockResolvedValueOnce({ isoCode: "CHF", value: 4 });
-  render(<Calculator isoCodes={isoCodes} />);
+  await renderCalculator();
 
   await select(1, "USD");
   await select(1, "CHF");
@@ -152,10 +178,68 @@ test("ignores the response of an outdated currency selection", async () => {
   expect(input(1)).toHaveValue("4.00");
 });
 
-test("shows an error when no currencies are available", () => {
-  render(<Calculator isoCodes={[]} />);
+test("warns and keeps the legacy currencies when the backend is down", async () => {
+  fetchIsoCodes.mockRejectedValue(new Error("Network Error"));
+  fetchRate.mockResolvedValue({ isoCode: "DEM", value: 1.95583 });
+  await renderCalculator(["EUR", "DEM"]);
 
-  expect(screen.getByRole("alert")).toHaveTextContent(
-    "Die Währungen konnten nicht geladen werden",
+  expect(await screen.findByRole("alert")).toHaveTextContent(
+    "Der Server ist nicht erreichbar",
   );
+
+  await select(1, "DEM – Deutsche Mark");
+  fireEvent.change(input(0), { target: { value: "100" } });
+
+  expect(input(1)).toHaveValue("1.96");
+});
+
+test("adds the currencies of the backend in the browser", async () => {
+  fetchIsoCodes.mockResolvedValue(["EUR", "USD", "DEM"]);
+  await renderCalculator(["EUR", "DEM"]);
+
+  fireEvent.mouseDown(screen.getAllByRole("combobox")[0]);
+
+  expect(
+    await screen.findByRole("option", { name: "USD" }),
+  ).toBeInTheDocument();
+});
+
+test("groups the legacy currencies without making the heading selectable", async () => {
+  fetchIsoCodes.mockResolvedValue(["EUR", "DEM"]);
+  await renderCalculator(["EUR", "DEM"]);
+
+  fireEvent.mouseDown(screen.getAllByRole("combobox")[1]);
+  fireEvent.click(screen.getByText("Historische Währungen"));
+
+  expect(fetchRate).not.toHaveBeenCalled();
+  expect(screen.getByRole("listbox")).toBeInTheDocument();
+  // the open menu hides the rest of the page from the accessibility tree
+  expect(
+    screen.getAllByRole("combobox", { hidden: true })[1],
+  ).toHaveTextContent("EUR");
+});
+
+test("shows only the code of a selected legacy currency", async () => {
+  fetchIsoCodes.mockResolvedValue(["EUR", "DEM"]);
+  fetchRate.mockResolvedValue({ isoCode: "DEM", value: 1.95583 });
+  await renderCalculator(["EUR", "DEM"]);
+
+  await select(1, "DEM – Deutsche Mark");
+
+  expect(screen.getAllByRole("combobox")[1]).toHaveTextContent(/^DEM$/);
+});
+
+test("converts between two legacy currencies through the euro", async () => {
+  fetchIsoCodes.mockResolvedValue(["EUR", "DEM", "ITL"]);
+  fetchRate.mockImplementation(async (isoCode) => ({
+    isoCode,
+    value: isoCode === "DEM" ? 1.95583 : 1936.27,
+  }));
+  await renderCalculator(["EUR", "DEM", "ITL"]);
+
+  await select(0, "DEM – Deutsche Mark");
+  await select(1, "ITL – Italienische Lira");
+  fireEvent.change(input(0), { target: { value: "100" } });
+
+  expect(input(1)).toHaveValue("990.00");
 });

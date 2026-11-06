@@ -1,6 +1,9 @@
 import Calculator from "../components/Calculator";
 import Heading from "../components/Heading";
-import { fetchAllIsoCodes } from "../service/BackendService";
+import {
+  FALLBACK_ISO_CODES,
+  fetchAllIsoCodes,
+} from "../service/BackendService";
 
 export interface HomeProps {
   isoCodes: string[];
@@ -14,12 +17,12 @@ const Home = ({ isoCodes }: HomeProps) => (
 );
 
 export async function getStaticProps() {
-  const isoCodes = await fetchAllIsoCodes();
-  return {
-    props: {
-      isoCodes,
-    },
-  };
+  try {
+    return { props: { isoCodes: await fetchAllIsoCodes() } };
+  } catch (error) {
+    console.log(error);
+    return { props: { isoCodes: FALLBACK_ISO_CODES } };
+  }
 }
 
 export default Home;
