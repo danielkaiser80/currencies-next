@@ -56,5 +56,8 @@
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "test:cov": "jest --ci --coverage"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
   }
 }
