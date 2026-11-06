@@ -38,7 +38,7 @@ const Calculator = ({ isoCodes }: CalculatorProps) => {
     }
 
     // the name is `input_${index}`
-    const index = parseInt(name.slice(-1), 10);
+    const index = Number.parseInt(name.slice(-1), 10);
     const otherValue =
       (value / exchangeRates[index]) * exchangeRates[1 - index];
 

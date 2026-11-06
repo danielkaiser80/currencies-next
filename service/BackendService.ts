@@ -34,5 +34,5 @@ export const fetchCurrencyForSymbol = async (
       value: string;
     }>(`${BASE_URL}/${symbol}`)
   ).data;
-  return { isoCode, value: parseFloat(value) };
+  return { isoCode, value: Number.parseFloat(value) };
 };
