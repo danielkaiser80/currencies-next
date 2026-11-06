@@ -3,7 +3,7 @@ module.exports = {
     "airbnb",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@next/next/recommended",
+    "plugin:@next/next/recommended-legacy",
     "prettier",
   ],
   overrides: [
