@@ -1,4 +1,14 @@
-import { Box, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  InputLabel,
+  ListSubheader,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import {
+  isLegacyCurrency,
+  LEGACY_CURRENCIES,
+} from "../service/LegacyCurrencies";
 
 interface SelectProps {
   isoCodes: string[];
@@ -9,6 +19,7 @@ interface SelectProps {
 
 const CurrencySelect = ({ isoCodes, label, value, onSelect }: SelectProps) => {
   const idLabel = `${label}label`;
+  const legacyCodes = isoCodes.filter(isLegacyCurrency);
 
   return (
     <Box sx={{ minWidth: 120 }}>
@@ -17,11 +28,22 @@ const CurrencySelect = ({ isoCodes, label, value, onSelect }: SelectProps) => {
         id={label}
         labelId={idLabel}
         value={value}
+        renderValue={(selected) => selected}
         onChange={(e) => onSelect(e.target.value)}
       >
-        {isoCodes.map((item) => (
+        {isoCodes
+          .filter((item) => !isLegacyCurrency(item))
+          .map((item) => (
+            <MenuItem key={item} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        {legacyCodes.length > 0 && (
+          <ListSubheader>Historische Währungen</ListSubheader>
+        )}
+        {legacyCodes.map((item) => (
           <MenuItem key={item} value={item}>
-            {item}
+            {item} – {LEGACY_CURRENCIES[item].name}
           </MenuItem>
         ))}
       </Select>
